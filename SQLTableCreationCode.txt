@@ -1,5 +1,5 @@
 
-------------------Making the Quality of Life Dimension------------------
+/*------------------Making the Quality of Life Dimension------------------*/
 
 DROP TABLE public."Quality_of_Life";
 CREATE TABLE IF NOT EXISTS public."Quality_of_Life"
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public."Quality_of_Life"
     "%_of_population_using_safely_managed_sanitation_services" real,
     "%_of_population_using_at_least_basic_drinking_water_services" real,
     "%_of_population_using_safely_managed_drinking_water_services" real,
-    "%_of_population_with_basic_handwashing_facilities_with_soap,water" real,
+    "%_of_population_with_basic_handwashing_facilities_with_soap" real,
     "Labor_force,_female(%_of_total_labor_force)" real,
     "%_of_women_employed_in_the_nonagricultural_sector" real,
     "Unemployment,_male(%_of_male_labor_force)" real,
@@ -26,10 +26,7 @@ CREATE TABLE IF NOT EXISTS public."Quality_of_Life"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Quality_of_Life"
-    OWNER to postgres;
-
-------------------Making the Population Dimension------------------
+/*------------------Making the Population Dimension------------------*/
 
 DROP TABLE public."Population";
 CREATE TABLE IF NOT EXISTS public."Population"
@@ -55,16 +52,16 @@ CREATE TABLE IF NOT EXISTS public."Population"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Population"
-    OWNER to postgres;
 
-------------------Making the Health Dimension------------------
 
+/*------------------Making the Health Dimension------------------*/
+
+DROP TABLE public."Health";
 CREATE TABLE public."Health"
 (
     "HealthKey" serial NOT NULL,
     "SurrogateKey" integer NOT NULL,
-    "Domestic_government_health_expenditure_per_capita(current US$)" integer NOT NULL,
+    "Domestic_government_health_expenditure_per_capita(current US$)" integer,
     "Hospital_beds(per_1,000_people)" integer,
     "Immunization_HepB3(%_of_one-year-old_children)" real,
     "Physicians(per_1,000_people)" integer,
@@ -85,11 +82,11 @@ CREATE TABLE public."Health"
     PRIMARY KEY ("HealthKey")
 );
 
-ALTER TABLE IF EXISTS public."Health"
-    OWNER to postgres; 
+TABLESPACE pg_default;
 
-------------------Making the Education Dimension------------------
+/*------------------Making the Education Dimension------------------*/
 
+DROP TABLE public."Education";
 CREATE TABLE public."Education"
 (
     "EducationKey" serial NOT NULL,
@@ -104,21 +101,21 @@ CREATE TABLE public."Education"
     "School_enrollment_secondary_male(%gross)" real,
     "School_enrollment_secondary_female(%gross)" real,
     "School_enrollment_tertiary_female(%gross)" real,
-    "School_enrollment_tertiary_male(%gross)" real,
-    "Primary_completion_rate,total(%of_relevant_age_group)" real,
+    "School_enrollment_tertiary(%gross)" real,
+    "Primary_completion_rate_total(%_of_relevant_age_group)" real,
      "Year" date,
     "Country" text,
     PRIMARY KEY ("EducationKey")
-);
+)
 
-ALTER TABLE IF EXISTS public."Education"
-    OWNER to postgres;
+TABLESPACE pg_default;
 
-------------------Making the Event Dimension------------------
+/*------------------Making the Event Dimension------------------*/
 
+DROP TABLE public."Event";
 CREATE TABLE public."Event"
 (
-    "EventID" serial NOT NULL,
+    "EventKey" serial NOT NULL,
     "SurrogateKey" integer NOT NULL,
     "Disaster_Type" text NOT NULL,
     "Disaster_Subtype" text,
@@ -132,10 +129,9 @@ CREATE TABLE public."Event"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Event"
-    OWNER to postgres;
 
-------------------Making the Month Dimension------------------
+
+/*------------------Making the Month Dimension------------------*/
 
 DROP TABLE public."Month";
 CREATE TABLE public."Month"
@@ -147,12 +143,11 @@ CREATE TABLE public."Month"
     "Year" date NOT NULL,
     "Decade" date NOT NULL,
     PRIMARY KEY ("MonthKey")
-);
+)
 
-ALTER TABLE IF EXISTS public."Month"
-    OWNER to postgres; 
+TABLESPACE pg_default;
 
-------------------Making the Country Dimension------------------
+/*------------------Making the Country Dimension------------------*/
 
 DROP TABLE public."Country";
 
@@ -180,11 +175,11 @@ CREATE TABLE public."Country"
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Country"
-    OWNER to postgres; 
 
-------------------Making the Fact Table Dimension------------------
 
+/*------------------Making the Fact Table Dimension------------------*/
+
+DROP TABLE public."Fact_Table";
 CREATE TABLE IF NOT EXISTS public."Fact_Table"
 (
     "MonthKey" integer NOT NULL ,
@@ -201,6 +196,3 @@ CREATE TABLE IF NOT EXISTS public."Fact_Table"
 )
 
 TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."Fact_Table"
-    OWNER to postgres;
