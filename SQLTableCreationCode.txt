@@ -1,0 +1,206 @@
+
+------------------Making the Quality of Life Dimension------------------
+
+DROP TABLE public."Quality_of_Life";
+CREATE TABLE IF NOT EXISTS public."Quality_of_Life"
+(
+    "QualityofLifeKey" serial NOT NULL ,
+    "SurrogateKey" integer NOT NULL,
+    "Country" text NOT NULL,
+    "Year" date NOT NULL,
+    "People_practicing_open_defecation(%_of_population)" real,
+    "%_of_population_using_least_basic_sanitation_services" real,
+    "%_of_population_using_safely_managed_sanitation_services" real,
+    "%_of_population_using_at_least_basic_drinking_water_services" real,
+    "%_of_population_using_safely_managed_drinking_water_services" real,
+    "%_of_population_with_basic_handwashing_facilities_with_soap,water" real,
+    "Labor_force,_female(%_of_total_labor_force)" real,
+    "%_of_women_employed_in_the_nonagricultural_sector" real,
+    "Unemployment,_male(%_of_male_labor_force)" real,
+    "Unemployment,_female(%_of_female_labor_force)" real,
+    "Unemployment,_total(%_of_total_labor_force)" real,
+    "Maternal_leave_benefits(%_of_wages_paid_in_covered_period)" real,
+    
+    CONSTRAINT "Quality_of_Life_pkey" PRIMARY KEY ("QualityofLifeKey")
+) 
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Quality_of_Life"
+    OWNER to postgres;
+
+------------------Making the Population Dimension------------------
+
+DROP TABLE public."Population";
+CREATE TABLE IF NOT EXISTS public."Population"
+(
+    "PopulationKey" serial NOT NULL ,
+    "SurrogateKey" integer NOT NULL,
+    "Country" text NOT NULL,
+    "Year" date NOT NULL,
+    "Poverty_headcount_ratio_at_national_poverty_line" real,
+    "Population,_total" bigint,
+    "Population,_male" bigint,
+    "Population,_female" bigint,
+    "Population_growth_(annual_%)" real,
+    "Birth_rate,_crude_(per_1,000_people)" real,
+    "Completeness_of_birth_registration_(%)" real,
+    "Rural_population_(%_of_total_population)" real,
+    "Urban_population_(%_of_total_population)" real,
+    "Net_migration" bigint,
+    "Age_dependency_ratio_(%_of_working-age_population)" real,
+    "Age_dependency_ratio,_young" real,
+    CONSTRAINT "Population_pkey" PRIMARY KEY ("PopulationKey")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Population"
+    OWNER to postgres;
+
+------------------Making the Health Dimension------------------
+
+CREATE TABLE public."Health"
+(
+    "HealthKey" serial NOT NULL,
+    "SurrogateKey" integer NOT NULL,
+    "Domestic_government_health_expenditure_per_capita(current US$)" integer NOT NULL,
+    "Hospital_beds(per_1,000_people)" integer,
+    "Immunization_HepB3(%_of_one-year-old_children)" real,
+    "Physicians(per_1,000_people)" integer,
+    "Deaths_by_communicable_diseases,maternal_prenatal&nutrition(%)" real,
+    "Number_of_people_who_are_undernourished" integer,
+    "Prevalence_of_overweight(%_of_children_under_5)" real,
+    "Prevalence_of_overweight(%_of_adults)" real,
+    "Completeness_of_death_registration_with_cause-of-death_info(%)" real,
+    "Low-birthweight_babies(%_of_births)" real,
+    "Total_alcohol_consumption_per_capita(L_of_pure_alcohol,15+)" real,
+    "Adults(ages_15+)_and_children(0-14_years)_living_with_HIV" integer,
+    "Prevalence_of_current_tobacco_use(%_of_adults)" real,
+    "Out-of-pocket_expenditure(%_of _current_health_expenditure)" real,
+    "Mortality_from_CVD,cancer,diabetes_or_CRD_between_30&70(%)" real,
+    "Nurses_and_midwives(per_1,000_people)" integer,
+    "Year" date,
+    "Country" text,
+    PRIMARY KEY ("HealthKey")
+);
+
+ALTER TABLE IF EXISTS public."Health"
+    OWNER to postgres; 
+
+------------------Making the Education Dimension------------------
+
+CREATE TABLE public."Education"
+(
+    "EducationKey" serial NOT NULL,
+    "SurrogateKey" integer NOT NULL,
+    "Literacy_rate_adult_female_(%_of_females_ages_15_and_above)" real,
+    "Literacy_rate_adult_male_(%_of_males_ages_15_and_above)" real,
+    "Literacy_rate_adult_total_(%_of_people_ages_15_and_above)" real,
+    "Literacy_rate_youth_total(%_of_people_ages_15-24)" real,
+    "Public_spending_on_education_total(%_of _GDP)" real,
+    "School_enrollment_primary_male(%gross)" real,
+    "School_enrollment_primary_female(%gross)" real,
+    "School_enrollment_secondary_male(%gross)" real,
+    "School_enrollment_secondary_female(%gross)" real,
+    "School_enrollment_tertiary_female(%gross)" real,
+    "School_enrollment_tertiary_male(%gross)" real,
+    "Primary_completion_rate,total(%of_relevant_age_group)" real,
+     "Year" date,
+    "Country" text,
+    PRIMARY KEY ("EducationKey")
+);
+
+ALTER TABLE IF EXISTS public."Education"
+    OWNER to postgres;
+
+------------------Making the Event Dimension------------------
+
+CREATE TABLE public."Event"
+(
+    "EventID" serial NOT NULL,
+    "SurrogateKey" integer NOT NULL,
+    "Disaster_Type" text NOT NULL,
+    "Disaster_Subtype" text,
+    "Total_Deaths" integer,
+    "Disaster_Subgroup" text,
+    "Country" text NOT NULL,
+    "Start_Year" date NOT NULL,
+    "End_Year" date NOT NULL,
+    PRIMARY KEY ("EventID")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Event"
+    OWNER to postgres;
+
+------------------Making the Month Dimension------------------
+
+DROP TABLE public."Month";
+CREATE TABLE public."Month"
+(
+    "MonthKey" serial NOT NULL,
+    "SurrogateKey" integer NOT NULL,
+    "Name" text NOT NULL,
+    "Quarter" integer NOT NULL,
+    "Year" date NOT NULL,
+    "Decade" date NOT NULL,
+    PRIMARY KEY ("MonthKey")
+);
+
+ALTER TABLE IF EXISTS public."Month"
+    OWNER to postgres; 
+
+------------------Making the Country Dimension------------------
+
+DROP TABLE public."Country";
+
+CREATE TABLE public."Country"
+(
+    "CountryKey" serial NOT NULL,
+    "SurrogateKey" integer NOT NULL,
+    "Name" text NOT NULL,
+    "Region" text,
+    "Continent" text,
+    "Currency" text,
+    "Capital" text,
+    "WB-2_Code" text,
+    "Country_Code" text,
+    "Source_of_most_recent_Income_and_expenditure_data" text,
+    "System_Of_Trade" text,
+    "External_debt_Reporting_status" text,
+    "Lending_category" text,
+    "SNA_price_valuation" text,
+    "Income_Group" text,
+    "Latest_Population_Census" text,
+    "Latest_Household_Survey" text,
+    PRIMARY KEY ("CountryKey")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Country"
+    OWNER to postgres; 
+
+------------------Making the Fact Table Dimension------------------
+
+CREATE TABLE IF NOT EXISTS public."Fact_Table"
+(
+    "MonthKey" integer NOT NULL ,
+    "CountryKey" integer NOT NULL,
+    "EducationKey" integer NOT NULL,
+    "QualityofLifeKey" integer NOT NULL,
+    "HealthKey" integer NOT NULL,
+    "EventKey" integer NOT NULL,
+    "PopulationKey" integer NOT NULL,
+    "Quality_of_Life" integer, 
+    "Development_Index" integer, 
+    "Human_Development_Index" real,
+    PRIMARY KEY ("MonthKey", "HealthKey", "EventKey", "PopulationKey")
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Fact_Table"
+    OWNER to postgres;
